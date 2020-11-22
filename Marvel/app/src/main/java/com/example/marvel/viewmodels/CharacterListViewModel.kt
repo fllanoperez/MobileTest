@@ -10,13 +10,14 @@ import com.example.marvel.models.Thumbnail
 import com.example.marvel.utils.ApiResource
 import com.example.marvel.views.models.CharacterListUIModel
 import com.example.marvel.views.models.CharacterUIModel
+import com.example.marvel.views.models.ComicUIModel
 
 class CharacterListViewModel: ViewModel() {
 
     private val _characters = MutableLiveData<ApiResource<CharacterListUIModel>>()
     val characters: LiveData<ApiResource<CharacterListUIModel>> = _characters
 
-    val pageSize = 25
+    val pageSize = 30 //MAX 100
     var characterList: CharacterListUIModel = CharacterListUIModel(emptyList())
 
     private val characterObserver = Observer<ApiResource<MarvelResponse>> {
@@ -36,9 +37,9 @@ class CharacterListViewModel: ViewModel() {
         MarvelRepository.getInstance().characters.removeObserver(characterObserver)
     }
 
-    fun onPaginate(page: Int){
-        MarvelRepository.getInstance().characters.value?.data?.let {
-            MarvelRepository.getInstance().getCharacters(it.data.offset + pageSize, pageSize)
+    fun onPaginate(){
+        _characters?.value?.data?.characters?.let {
+            MarvelRepository.getInstance().getCharacters(it.size, pageSize)
             _characters.value = ApiResource.Loading()
         }
     }
@@ -47,11 +48,19 @@ class CharacterListViewModel: ViewModel() {
         MarvelRepository.getInstance().getCharacters(0)
     }
 
+    fun isMoreItems(): Boolean {
+        getTotalItems()?.let { totalItems ->
+            return totalItems > characterList.characters.size
+        }
+        return true
+    }
 
     private fun observeCharacters() {
         MarvelRepository.getInstance().characters.observeForever(characterObserver)
         MarvelRepository.getInstance().getCharacters(0)
     }
+
+    private fun getTotalItems(): Int? = MarvelRepository.getInstance().characters.value?.data?.data?.total
 
     private fun postError(error: String?) {
         _characters.postValue(ApiResource.Error(error ?: ""))
@@ -70,7 +79,11 @@ class CharacterListViewModel: ViewModel() {
         val characterList = ArrayList<CharacterUIModel>()
         characterList.addAll(appendTo.characters)
         for (character in response.data.results){
-            characterList.add(CharacterUIModel(getImageURL(character.thumbnail), character.name, character.description))
+            val comicList = ArrayList<ComicUIModel>()
+            for (comic in character.comics.items){
+                comicList.add(ComicUIModel(comic.name))
+            }
+            characterList.add(CharacterUIModel(getImageURL(character.thumbnail), character.name, character.description, comicList))
         }
         return CharacterListUIModel(characterList)
     }

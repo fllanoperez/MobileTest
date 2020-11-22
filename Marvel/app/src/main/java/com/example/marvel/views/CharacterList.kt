@@ -43,7 +43,7 @@ class CharacterList: Fragment() {
 
     private val characterListPagination = object: PaginatedRecyclerView.Pagination() {
         override fun onPaginate(page: Int) {
-            viewModel.onPaginate(page)
+            viewModel.onPaginate()
         }
     }
 
@@ -88,12 +88,13 @@ class CharacterList: Fragment() {
     private fun showError() {
         binding?.root?.showSnackBar(getString(R.string.error_generic), getString(R.string.button_retry),
             View.OnClickListener { viewModel.retryGetCharacters() })
+        binding?.characterList?.pagination?.notifyPageError()
     }
 
     private fun showLoading() {
         binding?.let { view ->
             if(view.characterList.pagination?.state != PaginatedRecyclerView.Pagination.State.LOADING) {
-                view.progressbar?.visibility = View.VISIBLE
+                view.progressbar.visibility = View.VISIBLE
             }
         }
     }
@@ -102,6 +103,7 @@ class CharacterList: Fragment() {
         binding?.let { view ->
             view.progressbar.visibility = View.GONE
             data?.let { data ->
+                checkPaginationStatus(view.characterList.pagination)
                 charactersAdapter?.let { adapter ->
                         adapter.updateData(data.characters, viewModel.pageSize)
                     view.characterList.pagination?.notifyPageLoaded()
@@ -115,6 +117,12 @@ class CharacterList: Fragment() {
                 }
                 }
             }
+        }
+    }
+
+    private fun checkPaginationStatus(pagination: PaginatedRecyclerView.Pagination?){
+        if(!viewModel.isMoreItems()){
+            pagination?.notifyPaginationCompleted()
         }
     }
 }
