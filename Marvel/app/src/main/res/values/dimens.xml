@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="app_margin">10dp</dimen>
+    <dimen name="app_padding">15dp</dimen>
+    <dimen name="app_item_imagesize">50dp</dimen>
+    <dimen name="app_detail_imagesize">250dp</dimen>
+</resources>

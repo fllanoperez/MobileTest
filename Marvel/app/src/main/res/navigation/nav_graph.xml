@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/characterList">
+
+    <fragment
+        android:id="@+id/characterList"
+        android:name="com.example.marvel.views.CharacterList"
+        android:label="CharacterList" >
+        <action
+            android:id="@+id/action_characterList_to_characterDetail"
+            app:destination="@id/characterDetail" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/characterDetail"
+        android:name="com.example.marvel.views.CharacterDetail"
+        android:label="CharacterDetail">
+        <argument
+            android:name="characterModel"
+            app:argType="com.example.marvel.views.models.CharacterUIModel" />
+    </fragment>
+
+</navigation>

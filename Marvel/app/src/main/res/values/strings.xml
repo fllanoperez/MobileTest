@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Marvel</string>
+    <string name="error_generic">Ha ocurrido un error</string>
+    <string name="button_retry">Reintentar</string>
+</resources>

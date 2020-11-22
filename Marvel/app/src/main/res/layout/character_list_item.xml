@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="model"
+            type="com.example.marvel.views.models.CharacterUIModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/app_padding">
+
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="@dimen/app_item_imagesize"
+            android:layout_height="@dimen/app_item_imagesize"
+            android:layout_margin="@dimen/app_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:imageUrl="@{model.imageURL}"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/image"
+            app:layout_constraintBottom_toBottomOf="@id/image"
+            app:layout_constraintTop_toTopOf="@id/image"
+            android:layout_margin="@dimen/app_margin"
+            android:text="@{model.name}"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+    
